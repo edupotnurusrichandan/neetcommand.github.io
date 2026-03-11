@@ -393,7 +393,43 @@ body>*{position:relative;z-index:1}
 .err-badge:hover{background:rgba(255,79,94,.25)}
 .err-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;margin:3px 2px}
 
-/* ── TARGET MODAL ── */
+/* ── STAR RATING MODAL ── */
+.rating-modal{background:var(--surface);border:1px solid var(--amber);border-radius:14px;padding:0;width:520px;max-width:95vw;animation:slideUp .2s ease;max-height:88vh;display:flex;flex-direction:column;overflow:hidden}
+.rating-modal-head{padding:20px 24px 14px;border-bottom:1px solid var(--border);flex-shrink:0}
+.rating-modal-ch{font-family:'DM Serif Display',serif;font-size:20px;color:var(--text);margin-bottom:4px}
+.rating-modal-sub{font-size:11px;color:var(--text-muted);font-family:'Space Mono',monospace}
+.rating-topics-list{overflow-y:auto;flex:1;padding:8px 0}
+.rating-topic-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:8px 24px;border-bottom:1px solid rgba(30,45,71,.5);transition:background .1s}
+.rating-topic-row:hover{background:rgba(255,255,255,.02)}
+.rtr-name{font-size:13px;color:var(--text-muted)}
+.rtr-stars{display:flex;gap:4px}
+.rtr-star{font-size:18px;cursor:pointer;color:#1e2d47;transition:color .08s,transform .08s;background:none;border:none;padding:0;line-height:1}
+.rtr-star:hover{transform:scale(1.2)}
+.rtr-star.lit{color:#f59e0b}
+.rtr-star.lit-1{color:#ef4444}
+.rtr-star.lit-2{color:#f97316}
+.rtr-star.lit-3{color:#eab308}
+.rtr-star.lit-4{color:#22c55e}
+.rtr-star.lit-5{color:#0ea5e9}
+.rtr-badge{font-family:'Space Mono',monospace;font-size:9px;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;width:70px;text-align:center}
+.rating-modal-foot{padding:14px 24px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;gap:10px}
+.rating-progress{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim)}
+
+/* ── ERROR LOG PANEL ── */
+.error-panel{background:var(--surface2);border:1px solid rgba(255,79,94,.25);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.error-panel-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.error-panel-title{font-family:'Space Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--red)}
+.error-add-btn{background:rgba(255,79,94,.12);border:1px solid rgba(255,79,94,.3);color:var(--red);font-family:'Space Mono',monospace;font-size:11px;padding:3px 10px;border-radius:4px;cursor:pointer;transition:all .15s}
+.error-add-btn:hover{background:rgba(255,79,94,.22)}
+.error-chips-wrap{display:flex;flex-wrap:wrap;gap:6px;min-height:24px}
+.error-chip{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:5px;font-size:12px;font-family:'Space Mono',monospace}
+.error-empty{font-size:11px;color:var(--text-dim);font-family:'Space Mono',monospace}
+.error-inline-form{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
+.error-inline-form input{flex:1;background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:12px;padding:6px 10px;border-radius:5px}
+.error-inline-form input:focus{outline:none;border-color:var(--red)}
+.error-inline-form select{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Space Mono',monospace;font-size:12px;padding:6px 8px;border-radius:5px}
+.error-inline-form button{background:var(--red);border:none;color:#fff;font-family:'Space Mono',monospace;font-size:12px;padding:7px 14px;border-radius:5px;cursor:pointer;white-space:nowrap}
+
 .target-modal{background:var(--surface);border:1px solid var(--teal);border-radius:12px;padding:24px;width:360px;animation:slideUp .2s ease}
 /* ── NOTES DRAWER ── */
 .notes-modal{background:var(--surface);border:1px solid var(--teal);border-radius:12px;padding:24px;width:480px;animation:slideUp .2s ease}
@@ -840,6 +876,24 @@ body>*{position:relative;z-index:1}
           <div class="pv-item grand"><div class="pv-num" id="pv-total">0</div><div class="pv-label">Total</div><div class="pv-max">/720</div></div>
         </div>
         <button class="save-btn" id="saveBtn" onclick="saveMock()">✓ Save Mock Result</button>
+
+        <!-- INLINE ERROR LOG -->
+        <div class="error-panel" id="inlineErrorPanel" style="display:none">
+          <div class="error-panel-header">
+            <span class="error-panel-title">⚠ Wrong Topics in This Mock</span>
+            <span style="font-family:Space Mono,monospace;font-size:10px;color:var(--text-dim)" id="inlineErrMockName"></span>
+          </div>
+          <div class="error-chips-wrap" id="inlineErrChips"></div>
+          <div class="error-inline-form">
+            <input type="text" id="inlineErrTopic" placeholder="e.g. Nernst equation, Photoelectric effect..." onkeydown="if(event.key==='Enter')addInlineError()"/>
+            <select id="inlineErrSubj">
+              <option value="PHY">⚛ Phy</option>
+              <option value="CHEM">🧪 Chem</option>
+              <option value="BIO">🌱 Bio</option>
+            </select>
+            <button onclick="addInlineError()">+ Add</button>
+          </div>
+        </div>
       </div>
 
       <!-- RESULTS PANEL -->
@@ -1005,6 +1059,25 @@ body>*{position:relative;z-index:1}
   </div>
 </div>
 
+<!-- STAR RATING MODAL (auto-pops when chapter marked done) -->
+<div class="input-overlay" id="ratingModal">
+  <div class="rating-modal">
+    <div class="rating-modal-head">
+      <div style="font-size:11px;color:var(--amber);font-family:Space Mono,monospace;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">✅ Chapter Completed</div>
+      <div class="rating-modal-ch" id="ratingModalCh">Chapter Name</div>
+      <div class="rating-modal-sub">Rate each topic — ★ shaky → ★★★★★ mastered. Weak ones auto-add to backlogs.</div>
+    </div>
+    <div class="rating-topics-list" id="ratingTopicsList"></div>
+    <div class="rating-modal-foot">
+      <span class="rating-progress" id="ratingProgress">0 / 0 rated</span>
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" onclick="confirmTopicRatings()" style="background:var(--amber)">Save Ratings</button>
+        <button class="btn-secondary" onclick="skipRating()">Skip</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- NOTES DRAWER -->
 <div class="input-overlay" id="notesModal">
   <div class="notes-modal">
@@ -1145,6 +1218,109 @@ const CHAPTERS_FLAT = {
   chem: Object.values(CHAPTERS.chem).flat(),
   bio:  Object.values(CHAPTERS.bio).flat()
 };
+
+// ─── TOPIC-WISE SUBTOPICS PER CHAPTER ────────────────────────────────────────
+const CHAPTER_TOPICS = {
+  // PHYSICS 11
+  'Physical World & Measurement':['Units & Dimensions','Dimensional Analysis','Significant Figures','Error Analysis','SI Units & Conversions'],
+  'Kinematics':['Motion in Straight Line','Projectile Motion','Relative Velocity','v-t & x-t Graphs','Circular Motion Basics'],
+  'Laws of Motion':["Newton's Laws","Static & Kinetic Friction","Circular Motion & Banking","Pseudo Force","Free Body Diagrams"],
+  'Work, Energy & Power':['Work-Energy Theorem','Conservative & Non-conservative Forces','Potential Energy & Springs','Elastic & Inelastic Collisions','Power'],
+  'System of Particles & Rotational Motion':['Centre of Mass','Moment of Inertia','Torque & Couple','Angular Momentum','Rolling Motion'],
+  'Gravitation':["Kepler's Laws",'Gravitational Potential & Field','Satellites & Orbital Velocity','Escape Velocity','Variation of g'],
+  'Properties of Bulk Matter':['Elasticity & Stress-Strain','Surface Tension & Capillarity','Viscosity & Stokes Law',"Bernoulli's Theorem",'Pressure & Pascal\'s Law'],
+  'Thermodynamics':['Zeroth & First Law','Isothermal & Adiabatic Processes','Carnot Engine & Efficiency','Entropy','Second Law & Heat Engines'],
+  'Kinetic Theory of Gases':['Ideal Gas Equation','RMS & Mean Speed','Degrees of Freedom','Specific Heat Ratio (γ)','Mean Free Path & Pressure'],
+  'Oscillations':['SHM Equations & Energy','Spring-Mass System','Simple Pendulum','Resonance & Damping','Superposition of SHM'],
+  'Waves':['Wave Equation & Speed','Sound Waves & Intensity','Doppler Effect','Beats','Standing Waves & Harmonics'],
+  // PHYSICS 12
+  'Electric Charges & Fields':["Coulomb's Law",'Electric Field Lines','Gauss\'s Law','Electric Dipole','Continuous Charge Distribution'],
+  'Electrostatic Potential & Capacitance':['Electric Potential & Work','Equipotential Surfaces','Capacitors in Series/Parallel','Energy Stored in Capacitor','Dielectrics'],
+  'Current Electricity':["Ohm's Law & Resistivity","Kirchhoff's Laws","Wheatstone Bridge & Meter Bridge","EMF & Internal Resistance","Potentiometer"],
+  'Moving Charges & Magnetism':['Biot-Savart Law','Ampere\'s Circuital Law','Force on Current-Carrying Conductor','Cyclotron','Moving Coil Galvanometer'],
+  'Magnetism & Matter':['Bar Magnet & Dipole','Earth\'s Magnetism','Dia/Para/Ferromagnetism','Hysteresis','Magnetisation'],
+  'Electromagnetic Induction':["Faraday's Laws","Lenz's Law","Self & Mutual Inductance",'Eddy Currents','AC Generator'],
+  'Alternating Current':['RMS & Peak Values','LCR Series Circuit','Resonance & Power Factor','Transformer','Energy in AC Circuits'],
+  'Electromagnetic Waves':['Maxwell\'s Equations Concept','EM Spectrum & Properties','Displacement Current','Speed & Intensity of EM Waves','Applications by Wavelength'],
+  'Ray Optics & Optical Instruments':['Reflection & Mirrors','Refraction & Snell\'s Law','Lenses & Lens Formula','Prism & Dispersion','Microscope & Telescope'],
+  'Wave Optics':['Huygens Principle','Young\'s Double Slit Experiment','Interference Conditions','Single Slit Diffraction','Polarisation & Brewster\'s Law'],
+  'Dual Nature of Radiation & Matter':['Photoelectric Effect','Einstein\'s Equation','de Broglie Wavelength','Compton Effect','Davisson-Germer Experiment'],
+  'Atoms':['Bohr Model & Postulates','Spectral Series (Lyman etc.)','Energy Levels & Transitions','Limitations of Bohr Model','Atomic Spectra'],
+  'Nuclei':['Nuclear Forces & Binding Energy','Radioactivity & Decay Laws','Half-Life & Activity','Mass Defect','Fission & Fusion'],
+  'Semiconductor Electronics':['Energy Bands','p-n Junction Diode','Zener Diode & Rectifiers','Transistor & Amplifier','Logic Gates'],
+  // CHEMISTRY 11
+  'Some Basic Concepts of Chemistry':['Mole Concept','Stoichiometry & Balancing','Limiting Reagent','Molarity, Molality, Mole Fraction','Empirical & Molecular Formula'],
+  'Structure of Atom':['Quantum Numbers','Atomic Orbitals & Shapes','Electronic Configuration','Heisenberg Uncertainty','Photoelectric Effect & de Broglie'],
+  'Classification of Elements & Periodicity':['Periodic Trends – Atomic Radius','Ionization Energy & Electron Affinity','Electronegativity','Periodic Table Blocks','Anomalous Properties'],
+  'Chemical Bonding & Molecular Structure':['VSEPR Theory','Hybridization (sp, sp2, sp3, etc.)','Bond Order & Bond Length','MO Theory','Hydrogen Bonding & van der Waals'],
+  'States of Matter':['Gas Laws (Boyle, Charles, Avogadro)','van der Waals Equation','Kinetic Molecular Theory','Liquefaction of Gases','Real vs Ideal Gas'],
+  'Thermodynamics':['Enthalpy & Hess\'s Law','Bond Enthalpy','Gibbs Free Energy','Spontaneity & ΔG','Entropy & Second Law'],
+  'Equilibrium':['Law of Mass Action – Kc & Kp','Le Chatelier\'s Principle','pH & pOH','Buffer Solutions','Solubility Product (Ksp)'],
+  'Redox Reactions':['Oxidation State Assignment','Balancing by Ion-Electron Method','Disproportionation','Electrochemical Series','Oxidising/Reducing Agents'],
+  'Hydrogen':['Isotopes of Hydrogen','H2O2 – Properties & Reactions','Heavy Water','Hydrogen as Fuel','Hydrides'],
+  's-Block Elements':['Group 1 Properties & Reactions','Group 2 Properties & Reactions','Anomalous Behaviour of Li & Be','Na & K Compounds','Mg & Ca Compounds'],
+  'p-Block Elements (Gr. 13 & 14)':['Boron & its Compounds','Aluminium Reactions','Carbon Allotropes','Silicon & Silicates','Anomalous Behaviour of B & C'],
+  'Organic Chemistry – Basic Principles':['IUPAC Nomenclature','Types of Isomerism','Inductive & Resonance Effect','Carbocation, Carbanion, Radical','Reaction Mechanisms (SN1/SN2/E1/E2 basics)'],
+  'Hydrocarbons':['Alkane Reactions (Halogenation)','Alkene Reactions (Addition)','Alkyne Reactions','Benzene & Aromaticity','Conformations of Alkanes'],
+  'Environmental Chemistry':['Air Pollution & Smog','Ozone Layer & Depletion','Water Pollution','Acid Rain','Green Chemistry'],
+  // CHEMISTRY 12
+  'Solid State':['Crystal Systems & Unit Cells','Packing Efficiency & Radius Ratio','Point Defects','Electrical & Magnetic Properties','Coordination Number'],
+  'Solutions':["Raoult's Law",'Colligative Properties (4 types)',"Van't Hoff Factor",'Osmosis & Osmotic Pressure','Azeotropes & Henry\'s Law'],
+  'Electrochemistry':['Nernst Equation','Kohlrausch\'s Law','Electrolytic Conductance','Faraday\'s Laws of Electrolysis','Galvanic Cells & EMF'],
+  'Chemical Kinetics':['Rate Law & Order of Reaction','Zero, First & Second Order','Arrhenius Equation & Activation Energy','Half-Life Calculations','Reaction Mechanisms & Rate-Determining Step'],
+  'Surface Chemistry':['Adsorption – Physisorption vs Chemisorption','Freundlich & Langmuir Isotherms','Colloids – Types & Properties','Coagulation & Hardy-Schulze Rule','Catalysis & Enzymes'],
+  'p-Block Elements (Gr. 15–18)':['N & P Oxoacids','O & S Compounds','Halogens & Interhalogen Compounds','Noble Gases','Group 16 Trends'],
+  'd & f Block Elements':['Electronic Configuration of d-block','Variable Oxidation States & Colour','KMnO4 & K2Cr2O7 Reactions','Lanthanide Contraction','Actinides'],
+  'Coordination Compounds':['Werner\'s Theory & IUPAC Naming','Types of Isomerism','Valence Bond Theory','Crystal Field Theory (CFT)','Stability & Applications'],
+  'Haloalkanes & Haloarenes':['SN1 vs SN2 Mechanism','Elimination (E1/E2)','Nucleophilic Aromatic Substitution','Optical Activity','Uses & Environmental Impact'],
+  'Alcohols, Phenols & Ethers':['Preparation of Alcohols & Phenols','Reactions of -OH Group','Acidity of Phenol vs Alcohol','Ether Preparation & Reactions','Lucas Test & Victor Meyer\'s Test'],
+  'Aldehydes, Ketones & Carboxylic Acids':['Nucleophilic Addition to C=O','Aldol Condensation','Cannizzaro Reaction','Carboxylic Acid Derivatives','Named Reactions (Tollens, Fehling)'],
+  'Amines':['Basic Strength Order','Preparation Methods','Diazonium Salts & Reactions','Carbylamine Reaction','Hinsberg Test'],
+  'Biomolecules':['Carbohydrates – Types & Reactions','Protein Structure & Denaturation','Nucleic Acids – DNA vs RNA','Vitamins & Deficiencies','Enzymes & Lock-Key Model'],
+  'Polymers':['Addition vs Condensation Polymerisation','Natural & Synthetic Rubber','Plastics – Thermoplastic vs Thermosetting','Biodegradable Polymers','Named Polymers (Nylon, Dacron, Teflon)'],
+  'Chemistry in Everyday Life':['Drug–Target Interaction','Analgesics, Antibiotics, Antiseptics','Antacids & Antihistamines','Food Preservatives & Artificial Sweeteners','Soaps vs Detergents'],
+  // BIOLOGY 11
+  'The Living World':['Characteristics of Living Organisms','Biodiversity & Taxonomy','Hierarchical Classification','Nomenclature Rules (Binomial)','Taxonomic Aids'],
+  'Biological Classification':['Five Kingdom Classification','Monera – Bacteria & Archaea','Protista – Types','Fungi – Structure & Reproduction','Viruses, Viroids & Prions'],
+  'Plant Kingdom':['Algae – Classes & Examples','Bryophytes – Characteristics','Pteridophytes & Alternation of Generations','Gymnosperms vs Angiosperms','Plant Life Cycles'],
+  'Animal Kingdom':['Basis of Classification','Porifera to Echinodermata','Chordata – Subphyla','Key Identifying Features per Phylum','Comparison of Phyla'],
+  'Morphology of Flowering Plants':['Root – Types & Modifications','Stem – Types & Modifications','Leaf – Parts & Modifications','Inflorescence & Flower Formula','Fruit & Seed Types'],
+  'Anatomy of Flowering Plants':['Meristematic vs Permanent Tissue','Simple & Complex Tissues','Dicot vs Monocot Root/Stem/Leaf','Secondary Growth','Anatomy Diagrams'],
+  'Structural Organisation in Animals':['Animal Tissue Types','Epithelial Tissue – Types & Functions','Connective Tissue Types','Cockroach Anatomy','Earthworm & Frog Anatomy'],
+  'Cell: The Unit of Life':['Prokaryotic vs Eukaryotic Cell','Cell Organelles – Structure & Function','Cell Membrane & Fluid Mosaic Model','Nucleus & Chromosomes','Endomembrane System'],
+  'Biomolecules':['Carbohydrates – Monosaccharides to Polysaccharides','Protein Structure (1°–4°)','Lipids – Types & Functions','Nucleic Acids & Nucleotides','Enzyme Kinetics – Michaelis-Menten'],
+  'Cell Cycle & Cell Division':['Cell Cycle Phases (G1 S G2 M)','Mitosis – Stages & Significance','Meiosis I – Stages','Meiosis II & Significance','Checkpoints & Regulation'],
+  'Transport in Plants':['Osmosis & Water Potential','Plasmolysis & Imbibition','Ascent of Sap (Cohesion-Tension)','Translocation in Phloem','Active vs Passive Transport'],
+  'Mineral Nutrition':['Essential Macro & Micro Elements','Deficiency Symptoms','Nitrogen Cycle & Fixation','Symbiotic & Non-symbiotic Fixation','Hydroponics'],
+  'Photosynthesis in Higher Plants':['Light Reactions & Photosystems','Calvin Cycle (C3)','C4 Pathway & Kranz Anatomy','CAM Plants','Photorespiration & Limiting Factors'],
+  'Respiration in Plants':['Glycolysis – Steps & Yield','Pyruvate Oxidation','Krebs Cycle – Steps & Yield','Electron Transport Chain & ATP Synthesis','Fermentation & RQ'],
+  'Plant Growth & Development':['Growth Phases & Meristems','Plant Growth Regulators (5 types)','Photoperiodism – Day length','Vernalisation','Seed Dormancy & Germination'],
+  'Digestion & Absorption':['Alimentary Canal – Parts & Functions','Digestive Enzymes & Sites','Absorption in Small Intestine','Disorders (Constipation, Jaundice etc.)','Peristalsis & Segmentation'],
+  'Breathing & Exchange of Gases':['Respiratory Organs – Structure','Mechanism of Breathing (inspiration/expiration)','Oxygen & CO2 Transport in Blood','Haemoglobin Dissociation Curve','Respiratory Disorders'],
+  'Body Fluids & Circulation':['Blood Composition & Functions','Blood Groups & Rh Factor','Human Heart – Chambers & Valves','Cardiac Cycle & ECG','Lymphatic System'],
+  'Excretory Products & their Elimination':['Kidney Structure – Nephron','Urine Formation (Filtration, Reabsorption, Secretion)','Counter-current Mechanism','Hormonal Regulation (ADH, Aldosterone)','Excretory Disorders'],
+  'Locomotion & Movement':['Types of Movement','Muscle Fibre – Structure & Mechanism','Sliding Filament Theory','Skeletal System – Bones & Joints','Disorders (Arthritis, Osteoporosis etc.)'],
+  'Neural Control & Coordination':['Neuron Structure & Types','Nerve Impulse & Resting Potential','Synapse & Neurotransmitters','CNS & PNS','Sensory Organs (Eye, Ear)'],
+  'Chemical Coordination & Integration':['Endocrine Glands & Hormones','Pituitary – Anterior & Posterior','Thyroid, Parathyroid & Adrenal','Pancreas & Blood Sugar','Feedback Mechanisms'],
+  // BIOLOGY 12
+  'Reproduction in Organisms':['Asexual Reproduction – Types','Sexual Reproduction Phases','Lifecycle & Lifespan','Vegetative Propagation','Advantages of Sexual vs Asexual'],
+  'Sexual Reproduction in Flowering Plants':['Stamen & Pistil Structure','Pollen Development & Germination','Pollination – Types','Double Fertilisation','Fruit & Seed Development, Apomixis'],
+  'Human Reproduction':['Male Reproductive System','Female Reproductive System','Spermatogenesis vs Oogenesis','Fertilisation & Implantation','Embryonic Development & Parturition'],
+  'Reproductive Health':['Population & Birth Control Methods','STDs – Types & Prevention','MTP & Amniocentesis','Infertility & ART','Legal & Ethical Issues'],
+  'Principles of Inheritance & Variation':['Mendel\'s Laws & Exceptions','Chromosomal Theory of Inheritance','Sex Determination','Linkage & Crossing Over','Mutation Types'],
+  'Molecular Basis of Inheritance':['DNA Structure (Watson-Crick)','DNA Replication (Semiconservative)','Transcription & RNA Types','Translation & Genetic Code','Gene Regulation (Lac Operon)'],
+  'Evolution':['Origin of Life Theories','Darwinism & Natural Selection','Hardy-Weinberg Principle','Types of Natural Selection','Human Evolution'],
+  'Human Health & Disease':['Innate & Adaptive Immunity','Antibody Structure & Types','Common Diseases (Typhoid, Malaria etc.)','Cancer – Types & Causes','Drugs, Alcohol & Addiction'],
+  'Strategies for Enhancement in Food Production':['Plant Breeding Methods','Biofortification Examples','SCP & Aquaculture','Animal Husbandry','Tissue Culture & Somatic Hybridisation'],
+  'Microbes in Human Welfare':['Microbes in Food (Curd, Bread etc.)','Industrial Microbiology – Products','Sewage Treatment – Primary & Secondary','Biogas Production','Biocontrol Agents'],
+  'Biotechnology: Principles & Processes':['Recombinant DNA Technology','Restriction Enzymes & Cloning Vectors','PCR – Steps & Applications','Gel Electrophoresis','Gene Cloning in Bacteria'],
+  'Biotechnology & its Applications':['Transgenic Plants & Animals','Bt Crops & RNAi','Gene Therapy','GM Organisms – Benefits & Risks','Ethical Issues in Biotech'],
+  'Organisms & Populations':['Population Attributes & Growth','Logistic & Exponential Growth','Population Interactions (6 types)','Adaptations','Ecological Succession'],
+  'Ecosystem':['Food Chains & Food Webs','Ecological Pyramids','Energy Flow (10% Law)','Biogeochemical Cycles','Ecosystem Services & Productivity'],
+  'Biodiversity & Conservation':['Levels of Biodiversity','Biodiversity Hotspots','Causes of Biodiversity Loss','In-situ & Ex-situ Conservation','IUCN Categories'],
+  'Environmental Issues':['Air Pollution & Effects','Water & Soil Pollution','Greenhouse Effect & Global Warming','Ozone Depletion & UV','Deforestation & Solutions'],
+};
+
 const QUOTES = [
   {text:'The secret of getting ahead is getting started.',author:'— Mark Twain'},
   {text:'Do it now. Sometimes later becomes never.',author:'— Unknown'},
@@ -1174,6 +1350,7 @@ if(!state.exams) state.exams = [];
 if(!state.mockExams) state.mockExams = [];
 if(!state.chapterRatings) state.chapterRatings = {};
 if(!state.chapterNotes) state.chapterNotes = {};
+if(!state.topicRatings) state.topicRatings = {}; // key: "Chapter::Topic" → 1-5
 if(!state.target) state.target = {total:650,phy:140,chem:140,bio:370};
 if(!state.reviews) state.reviews = {}; // {chName:{nextReview,interval,doneDate}}
 const save = ()=>localStorage.setItem('neetState5',JSON.stringify(state));
@@ -1447,11 +1624,14 @@ function renderChapters(key,listId,barId,pctId){
         if(i>-1){
           done.splice(i,1);
           delete state.reviews[ch];
+          save();renderAllChapters();updateTopStats();renderSyllabusTracker();renderHeatmap();renderRevisions();
         } else {
           done.push(ch);
           scheduleReview(ch, true);
+          save();renderAllChapters();updateTopStats();renderSyllabusTracker();renderHeatmap();renderRevisions();
+          // Pop rating modal after short delay so chapter renders first
+          setTimeout(()=>openRatingModal(ch), 120);
         }
-        save();renderAllChapters();updateTopStats();renderSyllabusTracker();renderHeatmap();renderRevisions();
       };
       el.appendChild(li);
     });
@@ -1564,15 +1744,54 @@ function saveMock(){
   } else {
     phyS=gv('dmPhy');chemS=gv('dmChem');bioS=gv('dmBio');
   }
-  state.mocks.push({name,date,series,phy:phyS,chem:chemS,bio:bioS,total:phyS+chemS+bioS,mode:marksMode});
+  state.mocks.push({name,date,series,phy:phyS,chem:chemS,bio:bioS,total:phyS+chemS+bioS,mode:marksMode,errors:[]});
   save();
-  // clear inputs
   ['phyCorr','phyWrong','chemCorr','chemWrong','bioCorr','bioWrong','dmPhy','dmChem','dmBio'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('mockName').value='';
-  calcPreview();renderMockResults();updateTopStats();
+  calcPreview();renderMockResults();updateTopStats();renderTargetTracker();
   const btn=document.getElementById('saveBtn');
   btn.textContent='✓ Saved!';btn.style.background='var(--green)';
   setTimeout(()=>{btn.textContent='✓ Save Mock Result';btn.style.background='';},1500);
+  // Show inline error panel for this mock
+  const newIdx=state.mocks.length-1;
+  openInlineErrorPanel(newIdx);
+
+}
+
+// ─── INLINE ERROR LOG ─────────────────────────────────────────────────────────
+let _inlineErrIdx=-1;
+function openInlineErrorPanel(mockIdx){
+  _inlineErrIdx=mockIdx;
+  const m=state.mocks[mockIdx];
+  const panel=document.getElementById('inlineErrorPanel');
+  document.getElementById('inlineErrMockName').textContent=m.name;
+  panel.style.display='block';
+  renderInlineErrChips();
+  document.getElementById('inlineErrTopic').focus();
+}
+function renderInlineErrChips(){
+  const wrap=document.getElementById('inlineErrChips');
+  const errs=(_inlineErrIdx>=0&&state.mocks[_inlineErrIdx]?.errors)||[];
+  if(!errs.length){wrap.innerHTML='<span class="error-empty">No wrong topics yet — add below</span>';return;}
+  wrap.innerHTML=errs.map((e,i)=>{
+    const tag=TAGS[e.subject]||TAGS.GEN;
+    return `<span class="error-chip" style="background:${tag.color}18;color:${tag.color};border:1px solid ${tag.color}33">${e.topic} <button onclick="removeInlineErr(${i})" style="background:none;border:none;color:inherit;cursor:pointer;font-size:13px;padding:0;margin-left:2px;opacity:.7;line-height:1">×</button></span>`;
+  }).join('');
+}
+function addInlineError(){
+  if(_inlineErrIdx<0) return;
+  const topic=document.getElementById('inlineErrTopic').value.trim();
+  if(!topic) return;
+  const subj=document.getElementById('inlineErrSubj').value;
+  if(!state.mocks[_inlineErrIdx].errors) state.mocks[_inlineErrIdx].errors=[];
+  state.mocks[_inlineErrIdx].errors.push({topic,subject:subj});
+  save();document.getElementById('inlineErrTopic').value='';
+  renderInlineErrChips();renderMockResults();
+}
+function removeInlineErr(i){
+  if(_inlineErrIdx<0) return;
+  state.mocks[_inlineErrIdx].errors.splice(i,1);
+  save();renderInlineErrChips();renderMockResults();
 }
 
 function deleteMock(i){
@@ -1693,12 +1912,14 @@ function renderTargetTracker(){
 // ─── ERROR LOG ───────────────────────────────────────────────────────────────
 let currentErrorMockIdx = -1;
 function openErrorModal(mockIdx){
-  currentErrorMockIdx=mockIdx;
-  const m=state.mocks[mockIdx];
-  document.getElementById('errorModal').classList.add('show');
-  document.getElementById('errorModalMockName').textContent=`Mock: ${m.name} — ${m.date}`;
-  document.getElementById('errorTopic').value='';
-  renderErrorList();
+  openInlineErrorPanel(mockIdx);
+  // scroll the form panel into view smoothly
+  setTimeout(()=>{
+    const panel=document.getElementById('inlineErrorPanel');
+    panel.scrollIntoView({behavior:'smooth',block:'center'});
+    panel.style.borderColor='rgba(255,79,94,.6)';
+    setTimeout(()=>panel.style.borderColor='',1200);
+  },80);
 }
 function closeErrorModal(){document.getElementById('errorModal').classList.remove('show');currentErrorMockIdx=-1;renderMockResults();renderHeatmap();}
 function addError(){
@@ -1778,8 +1999,116 @@ function renderRevisions(){
 
 // ─── CONFIDENCE RATINGS ──────────────────────────────────────────────────────
 function setRating(ch, n){
-  state.chapterRatings[ch] = state.chapterRatings[ch]===n ? 0 : n; // toggle off if same
+  state.chapterRatings[ch] = state.chapterRatings[ch]===n ? 0 : n;
   save();renderAllChapters();renderHeatmap();
+}
+
+// Star rating modal — auto-pops on chapter completion — TOPIC-WISE
+let _ratingCh = '';
+const STAR_COLORS = ['','#ef4444','#f97316','#eab308','#22c55e','#0ea5e9'];
+const STAR_LABELS_SHORT = ['','Shaky','Weak','OK','Good','★ Mastered'];
+
+function topicKey(ch, topic){ return ch + '::' + topic; }
+
+function openRatingModal(ch){
+  _ratingCh = ch;
+  document.getElementById('ratingModal').classList.add('show');
+  document.getElementById('ratingModalCh').textContent = ch;
+  _renderTopicRatingRows(ch);
+}
+
+function _renderTopicRatingRows(ch){
+  const topics = CHAPTER_TOPICS[ch] || ['General Concepts'];
+  const list = document.getElementById('ratingTopicsList');
+  list.innerHTML = '';
+  topics.forEach(topic => {
+    const key = topicKey(ch, topic);
+    const cur = state.topicRatings[key] || 0;
+    const row = document.createElement('div');
+    row.className = 'rating-topic-row';
+    const badgeColor = cur ? STAR_COLORS[cur] : '#374151';
+    const badgeText = cur ? STAR_LABELS_SHORT[cur] : 'Not rated';
+    row.innerHTML = `
+      <span class="rtr-name">${topic}</span>
+      <span class="rtr-badge" id="rtrbadge-${CSS.escape(key)}" style="background:${badgeColor}20;color:${badgeColor};border:1px solid ${badgeColor}44">${badgeText}</span>
+      <div class="rtr-stars" id="rtrstars-${CSS.escape(key)}">
+        ${[1,2,3,4,5].map(n=>`<button class="rtr-star${n<=cur?' lit lit-'+n:''}" data-n="${n}" onclick="setTopicRating('${ch.replace(/'/g,"\\'")}','${topic.replace(/'/g,"\\'")}',${n})"  title="${['','★ Shaky','★★ Weak','★★★ OK','★★★★ Good','★★★★★ Mastered'][n]}">★</button>`).join('')}
+      </div>`;
+    list.appendChild(row);
+  });
+  _updateRatingProgress(ch);
+}
+
+function setTopicRating(ch, topic, n){
+  const key = topicKey(ch, topic);
+  // Toggle off if clicking same star
+  state.topicRatings[key] = state.topicRatings[key] === n ? 0 : n;
+  save();
+  // Re-render just that row's stars and badge
+  const escapedKey = CSS.escape(key);
+  const starsEl = document.getElementById('rtrstars-' + escapedKey);
+  const badgeEl = document.getElementById('rtrbadge-' + escapedKey);
+  const val = state.topicRatings[key] || 0;
+  if(starsEl){
+    starsEl.querySelectorAll('.rtr-star').forEach(btn => {
+      const r = parseInt(btn.dataset.n);
+      btn.className = 'rtr-star' + (r<=val ? ` lit lit-${val}` : '');
+    });
+  }
+  if(badgeEl){
+    const c = val ? STAR_COLORS[val] : '#374151';
+    const t = val ? STAR_LABELS_SHORT[val] : 'Not rated';
+    badgeEl.style.cssText = `background:${c}20;color:${c};border:1px solid ${c}44`;
+    badgeEl.textContent = t;
+  }
+  _updateRatingProgress(ch);
+}
+
+function _updateRatingProgress(ch){
+  const topics = CHAPTER_TOPICS[ch] || ['General Concepts'];
+  const rated = topics.filter(t => state.topicRatings[topicKey(ch,t)]).length;
+  document.getElementById('ratingProgress').textContent = `${rated} / ${topics.length} rated`;
+}
+
+function confirmTopicRatings(){
+  document.getElementById('ratingModal').classList.remove('show');
+  // Auto-add weak topics (★1 or ★2) to backlog
+  const topics = CHAPTER_TOPICS[_ratingCh] || [];
+  const weakTopics = topics.filter(t => {
+    const r = state.topicRatings[topicKey(_ratingCh, t)];
+    return r && r <= 2;
+  });
+  if(weakTopics.length){
+    const subjKey = Object.entries(CHAPTERS).find(([,cls])=>Object.values(cls).flat().includes(_ratingCh))?.[0]?.toUpperCase()||'GEN';
+    weakTopics.forEach(t => {
+      const label = `${_ratingCh} — ${t}`;
+      if(!state.backlogs.some(b => b.topic === label && !b.done)){
+        state.backlogs.push({id:Date.now()+Math.random(),topic:label,subject:TAGS[subjKey]?subjKey:'GEN',due:dateKey(addDays(now,2)),done:false,addedDate:dateKey(now)});
+      }
+    });
+    save(); renderBacklogs();
+    showToast(`⚠ ${weakTopics.length} weak topic${weakTopics.length>1?'s':''} added to backlogs`, 'var(--red)');
+  }
+  // Derive chapter-level rating = avg of rated topics
+  const ratedVals = topics.map(t=>state.topicRatings[topicKey(_ratingCh,t)]).filter(Boolean);
+  if(ratedVals.length){
+    state.chapterRatings[_ratingCh] = Math.round(ratedVals.reduce((a,b)=>a+b,0)/ratedVals.length);
+  }
+  save();
+  renderAllChapters(); renderHeatmap(); renderRevisions();
+  _ratingCh = '';
+}
+
+function skipRating(){
+  document.getElementById('ratingModal').classList.remove('show');
+  _ratingCh = '';
+}
+
+function showToast(msg, color='var(--teal)'){
+  const t = document.createElement('div');
+  t.style.cssText = `position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:${color};color:#fff;font-family:Space Mono,monospace;font-size:12px;padding:10px 22px;border-radius:8px;z-index:9999;animation:slideUp .2s ease;box-shadow:0 4px 20px rgba(0,0,0,.4);white-space:nowrap`;
+  t.textContent = msg; document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);}, 2600);
 }
 
 // ─── CHAPTER NOTES ───────────────────────────────────────────────────────────
@@ -2203,79 +2532,77 @@ async function generateAdvice(){
   const lastMock = mockCount ? state.mocks[state.mocks.length-1] : null;
   const dateStr = now.toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'});
 
-  // Confidence snapshot: group by rating
-  const allDone = Object.values(state.chapters).flat();
-  const STAR_LABELS = {1:'★ Very shaky',2:'★★ Weak',3:'★★★ OK',4:'★★★★ Good',5:'★★★★★ Mastered'};
-  const weakChapters = allDone.filter(ch=>(state.chapterRatings[ch]||0)<=2 && state.chapterRatings[ch]>0);
-  const unratedDone  = allDone.filter(ch=>!state.chapterRatings[ch]);
-  const confText = weakChapters.length
-    ? weakChapters.map(ch=>`  - ${ch} [${STAR_LABELS[state.chapterRatings[ch]]}]`).join('\n')
-    : '  None rated as weak';
-
-  // Top recurring error topics (aggregated across all mocks)
+  // Topic-wise weak ratings
+  const weakTopicsList = Object.entries(state.topicRatings||{})
+    .filter(([,r])=>r<=2&&r>0)
+    .map(([key,r])=>{ const [ch,topic]=key.split('::'); return {ch,topic,r}; })
+    .sort((a,b)=>a.r-b.r);
+  const confText = weakTopicsList.length
+    ? weakTopicsList.map(({ch,topic,r})=>`  - ${topic} (in ${ch}) [${['','★ Very shaky','★★ Weak'][r]}]`).join('\n')
+    : '  None rated as weak yet';
+  const needsRevTopics = Object.entries(state.topicRatings||{})
+    .filter(([,r])=>r===3).slice(0,8)
+    .map(([key])=>{ const [ch,t]=key.split('::'); return `${t} (${ch})`; });
+  const needsRevText = needsRevTopics.length ? needsRevTopics.join(', ') : 'None';
   const errorFreq={};
   state.mocks.forEach(m=>(m.errors||[]).forEach(e=>{
     const k=`${e.topic} [${TAGS[e.subject]?.label||e.subject}]`;
     errorFreq[k]=(errorFreq[k]||0)+1;
   }));
-  const topErrors = Object.entries(errorFreq).sort((a,b)=>b[1]-a[1]).slice(0,8);
-  const errorsText = topErrors.length
-    ? topErrors.map(([t,n])=>`  - ${t} (wrong ${n}x)`).join('\n')
-    : '  None logged yet';
-
-  // Notes context: chapters with notes (condensed — just first 120 chars each)
-  const notedChapters = Object.entries(state.chapterNotes||{})
-    .filter(([,n])=>n&&n.trim())
-    .slice(0,6)
+  const topErrors=Object.entries(errorFreq).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  const errorsText=topErrors.length?topErrors.map(([t,n])=>`  - ${t} (wrong ${n}x)`).join('\n'):'  None logged yet';
+  const notedChapters=Object.entries(state.chapterNotes||{}).filter(([,n])=>n&&n.trim()).slice(0,6)
     .map(([ch,n])=>`  ${ch}: ${n.slice(0,120).replace(/\n/g,' ')}…`);
-  const notesText = notedChapters.length ? notedChapters.join('\n') : '  None';
-
-  // Revisions overdue
-  const overdueRevs = getRevisionsDue().slice(0,6).map(r=>`  - ${r.ch}`).join('\n') || '  None';
+  const notesText=notedChapters.length?notedChapters.join('\n'):'  None';
+  const overdueRevs=getRevisionsDue().slice(0,6).map(r=>`  - ${r.ch}`).join('\n')||'  None';
+  const unratedCount=Object.values(state.chapters).flat()
+    .filter(ch=>!Object.keys(state.topicRatings||{}).some(k=>k.startsWith(ch+'::'))).length;
 
   const prompt = `You are an expert NEET UG coach. Today is ${dateStr}. NEET exam is on May 3, 2026.
-Target: 720/720. Be brutally specific — no generic advice.
+Target: 720/720. Be brutally specific — name exact topics, not just chapters.
 
 TODAY'S SCHEDULED TARGETS:
 ${todayTasks}
 
 PENDING BACKLOGS:
 ${backlogText}
-${overdueBacklogs.length ? `WARNING: ${overdueBacklogs.length} backlogs are OVERDUE!` : ''}
+${overdueBacklogs.length ? `WARNING: ${overdueBacklogs.length} backlogs OVERDUE!` : ''}
 
-WEAK CHAPTERS (low confidence rating):
+WEAK TOPICS (student rated ★1-★2 at topic level):
 ${confText}
 
-TOP RECURRING ERROR TOPICS (across all mocks):
+TOPICS NEEDING ONE MORE REVISION (rated ★3):
+${needsRevText}
+
+TOP RECURRING ERRORS IN MOCKS:
 ${errorsText}
 
-CHAPTERS OVERDUE FOR SPACED REPETITION REVIEW:
+CHAPTERS OVERDUE FOR SPACED REVISION:
 ${overdueRevs}
 
-STUDENT'S OWN NOTES (key formulas/concepts they wrote):
+STUDENT'S CHAPTER NOTES:
 ${notesText}
 
 OTHER STATS:
-- Chapters completed: ${chapsDone}/${totalChaps} | Unrated after completion: ${unratedDone.length}
-- Study streak: ${streak} days | Mocks taken: ${mockCount}
-${avgScore ? `- Average mock score: ${avgScore}/720` : ''}
+- Chapters done: ${chapsDone}/${totalChaps} | Unrated chapters: ${unratedCount}
+- Streak: ${streak} days | Mocks: ${mockCount}
+${avgScore ? `- Avg score: ${avgScore}/720` : ''}
 ${lastMock ? `- Last mock: Phy ${lastMock.phy}/180, Chem ${lastMock.chem}/180, Bio ${lastMock.bio}/360 (Total ${lastMock.total}/720)` : ''}
 
-Use EXACTLY these 4 section headers (with square brackets, nothing else on those lines):
+Use EXACTLY these 4 section headers:
 
 [PRIORITY]
-3 sentences. Name the top 2-3 things to fix TODAY based on weak chapters, recurring errors, and overdue revisions. Be specific — mention chapter names and error topics.
+Name the top 3 specific TOPICS (not just chapters) to fix today — from weak ratings and mock errors. Say exactly why each one.
 
 [SCHEDULE]
-Hour-by-hour plan. Prioritise weak chapters and recurring error topics. Format:
-TIME | TASK | SPECIFIC TIP
-09:00-10:30 | Electrochemistry revision (★★ weak) | Re-derive Nernst equation, do last 5yr PYQs
+TIME | SPECIFIC TOPIC | TECHNIQUE
+e.g: 09:00-10:30 | Nernst Equation (Electrochemistry) | Derive from scratch, solve 2015-2024 PYQs, make error list
 
 [HOW TO STUDY]
-For each weak/error topic in the schedule: exact 2-3 NEET techniques. Mention specific formulas or concepts from their notes if available.
+For each scheduled topic: 2-3 concrete NEET techniques. Reference student's notes/formulas if available.
 
 [STRATEGY]
-2-3 sentences. What to do to close the gap to 720. Be honest about what's holding them back.`;
+2-3 honest sentences on what is actually preventing 720 and what to do about it.`;
 
   try{
     const groqKey = localStorage.getItem('claudeApiKey');
@@ -2447,8 +2774,10 @@ document.getElementById('backlogModal').addEventListener('click',function(e){if(
 document.getElementById('examModal').addEventListener('click',function(e){if(e.target===this)closeExamModal()});
 document.getElementById('errorModal').addEventListener('click',function(e){if(e.target===this)closeErrorModal()});
 document.getElementById('targetModal').addEventListener('click',function(e){if(e.target===this)closeTargetModal()});
+document.getElementById('ratingModal').addEventListener('click',function(e){if(e.target===this)skipRating()});
 document.getElementById('notesModal').addEventListener('click',function(e){if(e.target===this)closeNotesModal()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeBacklogModal();closeExamModal();closeErrorModal();closeTargetModal();closeNotesModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeBacklogModal();closeExamModal();closeErrorModal();closeTargetModal();closeNotesModal();skipRating();}});
 </script>
 </body>
 </html>
+
