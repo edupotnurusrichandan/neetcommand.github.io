@@ -2748,7 +2748,7 @@ if(localStorage.getItem('gcalApiKey')){syncCalendar();syncMockExams();}
 // AI plan: restore today's saved plan or auto-generate for a new day
 (function initAIPlan(){
   const saved = localStorage.getItem('neetAIPlan');
-  const groqKey = localStorage.getItem('claudeApiKey');
+  const groqKey = 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;
   if(saved){
     try{
       const plan = JSON.parse(saved);
