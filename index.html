@@ -704,6 +704,23 @@ function handleForgot() {
   document.getElementById('ssub').innerHTML = `A password reset link has been sent to<br><b style="color:var(--teal)">${email}</b><br>Check your inbox (and spam folder).`;
 }
 
+     // inside your login script
+function loginUser() {
+    const username = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+
+    if (username === "Santosh" && pass === "your_password") {
+        // 1. Save "session" state
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("currentUser", username);
+        
+        // 2. Redirect to dashboard
+        window.location.href = "dashboard.html";
+    } else {
+        alert("Invalid Credentials");
+    }
+}
+     
 // ── DASHBOARD REDIRECT ────────────────────────────────────────────────────────
 function goToDashboard() { window.location.href = 'dashboard.html'; }
 
