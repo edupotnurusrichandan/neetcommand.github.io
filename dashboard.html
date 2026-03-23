@@ -1752,6 +1752,21 @@ function injectCalendarEvents(events){
   save();renderTasks();updateTopStats();
 }
 
+
+     document.addEventListener("DOMContentLoaded", () => {
+    // 1. Security Check: If not logged in, send back to index
+    if (localStorage.getItem("isLoggedIn") !== "true") {
+        window.location.href = "index.html";
+        return;
+    }
+
+    // 2. Restore Data
+    const savedData = localStorage.getItem("neet_command_data");
+    if (savedData) {
+        const data = JSON.parse(savedData);
+        renderDashboard(data); // Call your function to update charts/tables
+    }
+});
 // ─── CHAPTERS ─────────────────────────────────────────────────────────────────
 function renderChapters(key,listId,barId,pctId){
   const el=document.getElementById(listId);
