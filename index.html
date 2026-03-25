@@ -115,6 +115,18 @@ body.light-mode .card {
   border: 1px solid rgba(0,0,0,.07);
   box-shadow: 0 2px 12px rgba(0,0,0,.06);
 }
+body.light-mode #gateScreen {
+  background: linear-gradient(160deg, #e8f0ff 0%, #dde8ff 60%, #e4eeff 100%);
+}
+body.light-mode .gate-feat {
+  background: rgba(0,0,0,.03);
+  border-color: rgba(0,0,0,.08);
+}
+body.light-mode .gate-ob-input {
+  background: rgba(0,0,0,.04);
+  border-color: rgba(0,0,0,.12);
+  color: var(--text);
+}
 body.light-mode #googleLoginScreen {
   background: linear-gradient(160deg, #e8f0ff 0%, #dde8ff 55%, #e4eeff 100%);
 }
@@ -136,128 +148,160 @@ body.light-mode #googleLoginScreen {
 @keyframes slideDown { from { transform: translateY(-100%); } to { transform: none; } }
 
 /* ═══════════════════════════════════════════════
-   GOOGLE LOGIN SCREEN
+   GATE SCREEN  (replaces old google login screen CSS)
 ═══════════════════════════════════════════════ */
-#googleLoginScreen {
+#gateScreen {
   position: fixed; inset: 0; z-index: 10000;
-  background: linear-gradient(160deg, #060c1a 0%, #0a1428 55%, #060d1f 100%);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  padding: 32px 28px; gap: 0;
-  overflow: hidden;
+  background: linear-gradient(160deg, #060c1a 0%, #0a1428 60%, #060d1f 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px 20px; overflow: hidden;
+  transition: opacity .4s ease;
 }
-#googleLoginScreen.hidden { display: none; }
-#googleLoginScreen::before {
-  content:''; position:absolute; inset:0; z-index:0;
-  background-image:linear-gradient(rgba(30,45,71,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(30,45,71,.15) 1px,transparent 1px);
-  background-size:36px 36px; pointer-events:none;
+#gateScreen.hidden { opacity: 0; pointer-events: none; }
+#gateScreen.gone   { display: none; }
+#gateScreen::before {
+  content:''; position:absolute; inset:0;
+  background-image:linear-gradient(rgba(30,45,71,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(30,45,71,.12) 1px,transparent 1px);
+  background-size:36px 36px; pointer-events:none; z-index:0;
 }
-.gls-blob-1 { position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(245,158,11,.07);top:-80px;right:-60px;filter:blur(70px);animation:blobDrift 9s ease-in-out infinite alternate; }
-.gls-blob-2 { position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(20,184,166,.05);bottom:-40px;left:-50px;filter:blur(70px);animation:blobDrift 11s ease-in-out infinite alternate-reverse; }
-.gls-content {
+/* blobs */
+.gate-blob { position:absolute; border-radius:50%; will-change:transform; }
+.gate-blob::after { content:'';position:absolute;inset:0;border-radius:50%;background:inherit;filter:blur(55px); }
+.gate-blob-1 { width:280px;height:280px;background:rgba(245,158,11,.1);top:-60px;right:-50px;animation:blobDrift 14s ease-in-out infinite alternate; }
+.gate-blob-2 { width:220px;height:220px;background:rgba(20,184,166,.08);bottom:-30px;left:-40px;animation:blobDrift 18s ease-in-out infinite alternate-reverse; }
+
+/* panel container */
+.gate-panel {
   position: relative; z-index: 1;
+  width: 100%; max-width: 380px;
   display: flex; flex-direction: column;
   align-items: center; gap: 0;
-  width: 100%; max-width: 380px;
-  animation: spFadeUp .6s .1s both;
+  animation: gateIn .35s cubic-bezier(.4,0,.2,1) both;
+  max-height: calc(100vh - 48px); overflow-y: auto;
 }
-.gls-logo-ring {
-  width: 90px; height: 90px;
-  background: linear-gradient(135deg, rgba(245,166,35,.15), rgba(0,212,184,.1));
-  border: 2px solid rgba(245,166,35,.3);
-  border-radius: 28px;
+.gate-panel--hidden { display: none !important; }
+@keyframes gateIn { from{opacity:0;transform:translate3d(0,12px,0)} to{opacity:1;transform:translate3d(0,0,0)} }
+
+.gate-logo {
+  width: 72px; height: 72px;
+  background: linear-gradient(135deg,rgba(245,166,35,.18),rgba(0,212,184,.12));
+  border: 1.5px solid rgba(245,166,35,.28);
+  border-radius: 22px; font-size: 32px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 40px; margin-bottom: 24px;
-  box-shadow: 0 0 40px rgba(245,166,35,.15), 0 0 80px rgba(0,212,184,.08);
-  animation: ringPop .7s cubic-bezier(.34,1.56,.64,1) both;
+  margin-bottom: 18px;
+  box-shadow: 0 0 30px rgba(245,166,35,.12);
 }
-.gls-title {
+.gate-title {
   font-family: var(--font-display);
-  font-size: 28px; font-weight: 800;
-  color: var(--text); text-align: center;
-  letter-spacing: -.5px; margin-bottom: 6px;
+  font-size: 26px; font-weight: 800;
+  color: var(--text); text-align: center; letter-spacing: -.4px;
+  margin-bottom: 6px;
 }
-.gls-title span { color: var(--amber); }
-.gls-sub {
+.gate-title span { color: var(--amber); }
+.gate-sub {
   font-family: var(--font-mono); font-size: 10px;
-  color: var(--muted); letter-spacing: 3px;
+  color: var(--muted); letter-spacing: 2.5px;
   text-transform: uppercase; text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 28px;
 }
-.gls-features {
-  display: flex; flex-direction: column; gap: 12px;
-  width: 100%; margin-bottom: 36px;
+.gate-features { display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:24px; }
+.gate-feat {
+  display:flex;align-items:center;gap:12px;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;padding:12px 14px;
 }
-.gls-feature-row {
-  display: flex; align-items: center; gap: 14px;
-  background: rgba(255,255,255,.04);
-  border: 1px solid rgba(255,255,255,.07);
-  border-radius: 14px; padding: 14px 16px;
+.gate-feat-icon { width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0; }
+.gate-feat-t { font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px; }
+.gate-feat-d { font-size:10px;color:var(--muted); }
+.gate-google-btn {
+  width:100%;background:#fff;border:none;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 20px;font-family:var(--font-body);font-size:14px;font-weight:700;
+  color:#1a1a2e;cursor:pointer;margin-bottom:10px;
+  box-shadow:0 3px 16px rgba(0,0,0,.28);
+  transition:transform .12s,box-shadow .12s;
+  -webkit-tap-highlight-color:transparent;
 }
-.gls-feature-icon {
-  width: 38px; height: 38px; border-radius: 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
+.gate-google-btn:active { transform:scale(.97);box-shadow:0 1px 8px rgba(0,0,0,.2); }
+.gate-google-btn:disabled { opacity:.5;cursor:not-allowed; }
+.gate-skip-btn {
+  background:none;border:1px solid rgba(255,255,255,.1);border-radius:10px;
+  padding:11px 20px;color:var(--muted);font-family:var(--font-mono);
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  cursor:pointer;width:100%;transition:all .12s;
+  -webkit-tap-highlight-color:transparent;
 }
-.gls-feature-text { flex: 1; }
-.gls-feature-title { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
-.gls-feature-desc { font-size: 11px; color: var(--muted); }
-.gls-sign-btn {
-  width: 100%;
-  background: #fff;
-  border: none; border-radius: 14px;
-  display: flex; align-items: center; justify-content: center; gap: 12px;
-  padding: 16px 24px;
-  font-family: var(--font-body); font-size: 15px; font-weight: 700;
-  color: #1a1a2e; cursor: pointer;
-  box-shadow: 0 4px 24px rgba(0,0,0,.3);
-  transition: all .15s;
-  -webkit-tap-highlight-color: transparent;
-  margin-bottom: 14px;
+.gate-skip-btn:active { background:rgba(255,255,255,.06); }
+.gate-legal { font-family:var(--font-mono);font-size:9px;color:var(--dim);text-align:center;margin-top:10px;line-height:1.8; }
+
+/* loading overlay inside gate */
+.gate-loading {
+  display:none;position:absolute;inset:0;
+  background:rgba(6,12,26,.88);border-radius:16px;
+  flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  backdrop-filter:blur(4px);z-index:2;
 }
-.gls-sign-btn:active { transform: scale(.97); box-shadow: 0 2px 12px rgba(0,0,0,.25); }
-.gls-sign-btn svg { width: 22px; height: 22px; flex-shrink: 0; }
-.gls-skip-btn {
-  background: none; border: 1px solid rgba(255,255,255,.12);
-  border-radius: 12px; padding: 12px 24px;
-  color: var(--muted); font-family: var(--font-mono);
-  font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
-  cursor: pointer; width: 100%;
-  transition: all .15s; -webkit-tap-highlight-color: transparent;
+.gate-loading.show { display:flex; }
+.gate-spinner {
+  width:32px;height:32px;border:3px solid rgba(245,166,35,.2);
+  border-top-color:var(--amber);border-radius:50%;
+  animation:spin .65s linear infinite;
 }
-.gls-skip-btn:active { background: rgba(255,255,255,.06); }
-.gls-user-pill {
-  display: none;
-  align-items: center; gap: 10px;
-  background: rgba(0,212,184,.08);
-  border: 1px solid rgba(0,212,184,.2);
-  border-radius: 14px; padding: 12px 16px;
-  width: 100%; margin-bottom: 14px;
+@keyframes spin { to{transform:rotate(360deg)} }
+.gate-loading-txt { font-family:var(--font-mono);font-size:11px;color:var(--muted); }
+
+/* returning user panel */
+.gate-wb-avatar {
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,var(--amber),var(--teal));
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;font-weight:800;color:#000;
+  margin-bottom:14px;overflow:hidden;
+  box-shadow:0 0 24px rgba(245,158,11,.25);
 }
-.gls-user-pill.show { display: flex; }
-.gls-avatar {
-  width: 38px; height: 38px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--amber), var(--teal));
-  display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 800; color: #000;
-  flex-shrink: 0; overflow: hidden;
+.gate-wb-avatar img { width:100%;height:100%;object-fit:cover; }
+.gate-wb-name { font-size:22px;font-weight:800;color:var(--text);margin-bottom:4px;text-align:center; }
+.gate-wb-email { font-family:var(--font-mono);font-size:10px;color:var(--muted);margin-bottom:20px;text-align:center; }
+.gate-wb-stats {
+  display:flex;gap:8px;width:100%;margin-bottom:20px;
 }
-.gls-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.gls-user-name { font-size: 14px; font-weight: 700; color: var(--text); }
-.gls-user-email { font-size: 10px; color: var(--muted); font-family: var(--font-mono); }
-.gls-loading {
-  display: none; flex-direction: column;
-  align-items: center; gap: 12px; padding: 20px;
+.gate-wb-stat {
+  flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;padding:12px 8px;text-align:center;
 }
-.gls-loading.show { display: flex; }
-.gls-spinner {
-  width: 32px; height: 32px; border: 3px solid rgba(245,166,35,.2);
-  border-top-color: var(--amber); border-radius: 50%;
-  animation: spin .7s linear infinite;
+.gate-wb-sv { font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--amber);line-height:1; }
+.gate-wb-sl { font-size:10px;color:var(--muted);margin-top:4px; }
+
+/* onboarding inside gate */
+.gate-ob-step { width:100%; }
+.gate-ob-step--hidden { display:none !important; }
+.gate-ob-label { font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;text-align:center; }
+.gate-ob-input {
+  width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:14px 16px;color:var(--text);
+  font-family:var(--font-body);font-size:16px;outline:none;
+  margin-bottom:14px;transition:border-color .15s;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
+.gate-ob-input:focus { border-color:rgba(245,166,35,.5); }
+.gate-ob-years { display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;width:100%; }
+.gate-ob-year {
+  padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.04);color:var(--muted);
+  font-family:var(--font-mono);font-size:14px;font-weight:700;
+  cursor:pointer;transition:all .12s;-webkit-tap-highlight-color:transparent;
+}
+.gate-ob-year.sel,.gate-ob-year:active {
+  background:rgba(245,158,11,.12);border-color:var(--amber);color:var(--amber);
+}
+.gate-ob-dots { display:flex;gap:8px;margin-top:20px; }
+.gate-ob-dot {
+  width:7px;height:7px;border-radius:50%;
+  background:rgba(255,255,255,.15);transition:all .25s;
+}
+.gate-ob-dot--active { background:var(--amber);width:20px;border-radius:3px; }
 
 /* ═══════════════════════════════════════════════
+   CLOUD RESTORE PROMPT/* ═══════════════════════════════════════════════
    CLOUD RESTORE PROMPT
 ═══════════════════════════════════════════════ */
 #cloudRestorePrompt {
@@ -482,8 +526,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding-bottom: calc(var(--nav-h) + var(--safe-b));
-  /* Subtle noise texture overlay */
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
 }
 
 /* scrollbars */
@@ -501,21 +543,32 @@ body {
   position: fixed; inset: 0; z-index: 9999;
   background: linear-gradient(160deg, #060c1a 0%, #0a1428 55%, #060d1f 100%);
   overflow: hidden;
-  transition: opacity .6s ease, transform .6s ease;
+  transition: opacity .5s ease, transform .5s ease;
+  display: none; /* hidden until after login — shown by JS */
+  will-change: opacity, transform;
 }
-#splash.out { opacity: 0; transform: scale(1.04); pointer-events: none; }
+#splash.visible { display: block; }
+#splash.out { opacity: 0; transform: scale3d(1.03,1.03,1); pointer-events: none; }
 
 /* Background decorations — shared across all slides */
 .sp-bg {
   position: absolute; inset: 0; pointer-events: none;
+  will-change: auto;
 }
 .sp-blob {
-  position: absolute; border-radius: 50%; filter: blur(70px);
+  position: absolute; border-radius: 50%;
+  /* blur on a static pseudo-element, NOT on the animating element */
+  will-change: transform;
 }
-.sp-blob-1 { width:320px;height:320px;background:rgba(245,158,11,.07);top:-80px;right:-80px;animation:blobDrift 9s ease-in-out infinite alternate; }
-.sp-blob-2 { width:260px;height:260px;background:rgba(20,184,166,.05);bottom:-60px;left:-70px;animation:blobDrift 11s ease-in-out infinite alternate-reverse; }
-.sp-blob-3 { width:200px;height:200px;background:rgba(59,130,246,.04);top:40%;left:8%;animation:blobDrift 13s ease-in-out infinite alternate; }
-@keyframes blobDrift { from{transform:translate(0,0) scale(1)} to{transform:translate(22px,18px) scale(1.12)} }
+.sp-blob::after {
+  content:''; position:absolute; inset:0; border-radius:50%;
+  filter: blur(60px);
+  background: inherit;
+}
+.sp-blob-1 { width:320px;height:320px;background:rgba(245,158,11,.09);top:-80px;right:-80px;animation:blobDrift 12s ease-in-out infinite alternate; }
+.sp-blob-2 { width:260px;height:260px;background:rgba(20,184,166,.07);bottom:-60px;left:-70px;animation:blobDrift 15s ease-in-out infinite alternate-reverse; }
+.sp-blob-3 { width:200px;height:200px;background:rgba(59,130,246,.05);top:40%;left:8%;animation:blobDrift 18s ease-in-out infinite alternate; }
+@keyframes blobDrift { from{transform:translate3d(0,0,0) scale(1)} to{transform:translate3d(20px,16px,0) scale(1.08)} }
 #splash::before {
   content:''; position:absolute; inset:0; z-index:0;
   background-image:linear-gradient(rgba(30,45,71,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(30,45,71,.15) 1px,transparent 1px);
@@ -526,8 +579,9 @@ body {
 .sp-slides {
   position: absolute; inset: 0;
   display: flex;
-  transition: transform .55s cubic-bezier(.4,0,.2,1);
+  transition: transform .45s cubic-bezier(.4,0,.2,1);
   z-index: 1;
+  will-change: transform;
 }
 
 /* Individual slide */
@@ -750,12 +804,12 @@ body {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
   padding: calc(var(--safe-t) + 13px) 18px 13px;
-  background: rgba(5,8,15,.88);
+  background: rgba(5,8,15,.92);
   border-bottom: 1px solid rgba(255,255,255,.06);
-  backdrop-filter: blur(32px) saturate(1.6);
-  -webkit-backdrop-filter: blur(32px) saturate(1.6);
-  /* Thin gold line on bottom */
-  box-shadow: 0 1px 0 rgba(245,166,35,.08), 0 8px 32px rgba(0,0,0,.3);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 1px 0 rgba(245,166,35,.08), 0 4px 20px rgba(0,0,0,.25);
+  contain: layout style;
 }
 .tb-left { display: flex; align-items: center; gap: 10px; }
 .tb-logo {
@@ -795,13 +849,13 @@ body {
 ═══════════════════════════════════════════════ */
 .bottom-nav {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-  background: rgba(4,6,14,.94);
+  background: rgba(4,6,14,.96);
   border-top: 1px solid rgba(255,255,255,.07);
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   padding-bottom: var(--safe-b);
-  /* Subtle top glow line */
-  box-shadow: 0 -1px 0 rgba(244,192,83,.1), 0 -8px 40px rgba(0,0,0,.4);
+  box-shadow: 0 -1px 0 rgba(244,192,83,.1), 0 -4px 20px rgba(0,0,0,.35);
+  contain: layout style;
 }
 .nav-inner {
   display: grid; grid-template-columns: repeat(4, 1fr);
@@ -856,9 +910,9 @@ body {
 /* ═══════════════════════════════════════════════
    PAGE SYSTEM
 ═══════════════════════════════════════════════ */
-.page { display: none; padding: 0 0 16px; animation: pageIn var(--trans) both; }
+.page { display: none; padding: 0 0 16px; animation: pageIn .18s var(--trans) both; contain: content; }
 .page.active { display: block; }
-@keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+@keyframes pageIn { from { opacity: 0; transform: translate3d(0,8px,0); } to { opacity: 1; transform: translate3d(0,0,0); } }
 
 /* ═══════════════════════════════════════════════
    SHARED COMPONENTS
@@ -949,13 +1003,14 @@ body {
 /* modal overlay */
 .overlay {
   position: fixed; inset: 0; z-index: 300;
-  background: rgba(5,8,18,.85);
-  backdrop-filter: blur(8px);
+  background: rgba(5,8,18,.88);
+  backdrop-filter: blur(6px);
   display: none; align-items: flex-end; justify-content: center;
   padding: 0;
 }
 .overlay.show { display: flex; }
 .sheet {
+  will-change: transform;
   background: linear-gradient(180deg, #0f1624 0%, #0d1220 100%);
   border-radius: 24px 24px 0 0;
   border: 1px solid rgba(255,255,255,.09);
@@ -966,7 +1021,7 @@ body {
   animation: sheetUp .28s cubic-bezier(.34,1.2,.64,1) both;
   box-shadow: 0 -20px 60px rgba(0,0,0,.6), 0 -1px 0 rgba(255,255,255,.06);
 }
-@keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
+@keyframes sheetUp { from { transform: translate3d(0,100%,0); } to { transform: translate3d(0,0,0); } }
 .sheet-handle {
   width: 36px; height: 4px; background: var(--border2);
   border-radius: 2px; margin: 12px auto 0;
@@ -2611,7 +2666,7 @@ h1, h2, .hero-name, .milestone-title, .sc-grade,
 .count-anim { animation: countUp .3s cubic-bezier(.4,0,.2,1) both; }
 
 /* Card entrance stagger */
-@keyframes cardIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+@keyframes cardIn { from { opacity: 0; transform: translate3d(0,10px,0); } to { opacity: 1; transform: translate3d(0,0,0); } } to{opacity:1;transform:none} }
 .card-stagger-1 { animation: cardIn .3s .05s both; }
 .card-stagger-2 { animation: cardIn .3s .12s both; }
 .card-stagger-3 { animation: cardIn .3s .19s both; }
@@ -3222,74 +3277,82 @@ h1, h2, .hero-name, .milestone-title, .sc-grade,
   📡 Offline Mode — changes saved locally, will sync when you reconnect
 </div>
 
-<!-- ═══ GOOGLE LOGIN SCREEN ══════════════════════════════════ -->
-<div id="googleLoginScreen">
-  <div class="gls-blob-1"></div>
-  <div class="gls-blob-2"></div>
-  <div class="gls-content">
-    <div class="gls-logo-ring">⚕</div>
-    <div class="gls-title">NEET <span>Command</span></div>
-    <div class="gls-sub">Your personal study command center</div>
+<!-- ═══════════════════════════════════════════════════════════
+     GATE SCREEN  (login → onboarding → splash → app)
+════════════════════════════════════════════════════════════ -->
+<div id="gateScreen">
+  <div class="gate-blob gate-blob-1"></div>
+  <div class="gate-blob gate-blob-2"></div>
 
-    <!-- Signed-in user pill (shown after login) -->
-    <div class="gls-user-pill" id="glsUserPill">
-      <div class="gls-avatar" id="glsAvatar">?</div>
-      <div>
-        <div class="gls-user-name" id="glsUserName">Loading…</div>
-        <div class="gls-user-email" id="glsUserEmail"></div>
-      </div>
+  <!-- ── PANEL A: Sign in ─────────────────────────────────── -->
+  <div class="gate-panel" id="gateLogin">
+    <div class="gate-logo">⚕</div>
+    <div class="gate-title">NEET <span>Command</span></div>
+    <div class="gate-sub">Your personal path to 720</div>
+    <div class="gate-features">
+      <div class="gate-feat"><div class="gate-feat-icon" style="background:rgba(0,212,184,.12)">☁️</div><div><div class="gate-feat-t">Cross-Device Sync</div><div class="gate-feat-d">Progress saved to your Google Drive</div></div></div>
+      <div class="gate-feat"><div class="gate-feat-icon" style="background:rgba(245,158,11,.12)">🔒</div><div><div class="gate-feat-t">Private & Safe</div><div class="gate-feat-d">Hidden in your own Drive only</div></div></div>
+      <div class="gate-feat"><div class="gate-feat-icon" style="background:rgba(96,165,250,.12)">⚡</div><div><div class="gate-feat-t">Auto-Sync</div><div class="gate-feat-d">Saves every chapter rating & mock score</div></div></div>
     </div>
-
-    <!-- Loading spinner -->
-    <div class="gls-loading" id="glsLoading">
-      <div class="gls-spinner"></div>
-      <div style="font-family:var(--font-mono);font-size:11px;color:var(--muted)">Syncing your data…</div>
-    </div>
-
-    <!-- Feature highlights -->
-    <div class="gls-features" id="glsFeatures">
-      <div class="gls-feature-row">
-        <div class="gls-feature-icon" style="background:rgba(0,212,184,.1)">☁️</div>
-        <div class="gls-feature-text">
-          <div class="gls-feature-title">Cross-Device Sync</div>
-          <div class="gls-feature-desc">Progress synced via Google Drive — use on any device</div>
-        </div>
-      </div>
-      <div class="gls-feature-row">
-        <div class="gls-feature-icon" style="background:rgba(245,158,11,.1)">🔒</div>
-        <div class="gls-feature-text">
-          <div class="gls-feature-title">Private & Safe</div>
-          <div class="gls-feature-desc">Data stored in your own Drive — no one else can see it</div>
-        </div>
-      </div>
-      <div class="gls-feature-row">
-        <div class="gls-feature-icon" style="background:rgba(96,165,250,.1)">⚡</div>
-        <div class="gls-feature-text">
-          <div class="gls-feature-title">Auto-Sync</div>
-          <div class="gls-feature-desc">Saves every time you rate a chapter or log a mock</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Sign in button -->
-    <button class="gls-sign-btn" id="glsSignInBtn" onclick="handleGoogleSignIn()">
-      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-      </svg>
+    <button class="gate-google-btn" id="gateSignInBtn" onclick="handleGoogleSignIn()">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       Sign in with Google
     </button>
-
-    <!-- Skip / continue offline -->
-    <button class="gls-skip-btn" onclick="proceedOffline()">Continue without signing in</button>
-
-    <div style="font-family:var(--font-mono);font-size:9px;color:var(--dim);text-align:center;margin-top:12px;line-height:1.8">
-      Uses Google Drive appDataFolder scope<br>Your study data is hidden from all other apps
+    <button class="gate-skip-btn" onclick="proceedOffline()">Continue without signing in</button>
+    <div class="gate-legal">Uses Drive appDataFolder · private to your account only</div>
+    <div class="gate-loading" id="gateLoading">
+      <div class="gate-spinner"></div>
+      <div class="gate-loading-txt" id="gateLoadingTxt">Signing in…</div>
     </div>
   </div>
-</div>
+
+  <!-- ── PANEL B: Returning user ──────────────────────────── -->
+  <div class="gate-panel gate-panel--hidden" id="gateWelcomeBack">
+    <div class="gate-wb-avatar" id="gateWbAvatar">?</div>
+    <div class="gate-title" style="margin-bottom:4px">Welcome back,</div>
+    <div class="gate-wb-name" id="gateWbName">—</div>
+    <div class="gate-wb-email" id="gateWbEmail">—</div>
+    <div class="gate-wb-stats" id="gateWbStats">
+      <div class="gate-wb-stat"><div class="gate-wb-sv" id="wbChaps">—</div><div class="gate-wb-sl">Chapters</div></div>
+      <div class="gate-wb-stat"><div class="gate-wb-sv" id="wbMocks">—</div><div class="gate-wb-sl">Mocks</div></div>
+      <div class="gate-wb-stat"><div class="gate-wb-sv" id="wbStreak">—</div><div class="gate-wb-sl">Streak</div></div>
+    </div>
+    <button class="gate-google-btn" style="margin-top:4px" onclick="gateEnterApp()">Let's go →</button>
+    <button class="gate-skip-btn" onclick="handleGoogleSignIn()">Switch account</button>
+  </div>
+
+  <!-- ── PANEL C: New user onboarding ─────────────────────── -->
+  <div class="gate-panel gate-panel--hidden" id="gateOnboard">
+    <div class="gate-logo" style="margin-bottom:12px">👋</div>
+    <div class="gate-title">Tell us about you</div>
+    <div class="gate-sub" style="margin-bottom:24px">We'll personalise your dashboard</div>
+    <div class="gate-ob-step" id="gateObStep0">
+      <div class="gate-ob-label">What should we call you?</div>
+      <input class="gate-ob-input" id="gateObName" type="text" placeholder="Your first name…" maxlength="40"
+        oninput="document.getElementById('gateObNext').disabled=!this.value.trim()"
+        onkeydown="if(event.key==='Enter'&&this.value.trim())gateObNext()"/>
+      <button class="gate-google-btn" id="gateObNext" onclick="gateObNext()" disabled>Continue →</button>
+    </div>
+    <div class="gate-ob-step gate-ob-step--hidden" id="gateObStep1">
+      <div class="gate-ob-label">Which year are you appearing?</div>
+      <div class="gate-ob-years" id="gateObYears">
+        <button class="gate-ob-year" onclick="gateObYear(2025,this)">2025</button>
+        <button class="gate-ob-year" onclick="gateObYear(2026,this)">2026</button>
+        <button class="gate-ob-year" onclick="gateObYear(2027,this)">2027</button>
+        <button class="gate-ob-year" onclick="gateObYear(2028,this)">2028</button>
+      </div>
+      <button class="gate-google-btn" id="gateObDone" onclick="gateObDone()" disabled>Let's begin 🚀</button>
+    </div>
+    <div class="gate-ob-dots">
+      <div class="gate-ob-dot gate-ob-dot--active" id="gobDot0"></div>
+      <div class="gate-ob-dot" id="gobDot1"></div>
+    </div>
+  </div>
+
+</div><!-- /#gateScreen -->
+
+<!-- LEGACY DIV stub so old JS refs don't crash -->
+<div id="googleLoginScreen" style="display:none"></div>
 
 <!-- ═══ CLOUD RESTORE PROMPT ════════════════════════════════ -->
 <div id="cloudRestorePrompt">
@@ -3376,7 +3439,7 @@ h1, h2, .hero-name, .milestone-title, .sc-grade,
   <div class="sp-slides" id="spSlides">
 
     <!-- ── SLIDE 1: Brand + Medical ── -->
-    <div class="sp-slide active" id="spSlide0">
+    <div class="sp-slide" id="spSlide0">
       <div class="sp-ring-wrap">
         <svg width="110" height="110" viewBox="0 0 110 110">
           <defs>
@@ -3460,7 +3523,7 @@ h1, h2, .hero-name, .milestone-title, .sc-grade,
 
   <!-- Dot pagination -->
   <div class="sp-dots">
-    <div class="sp-dot active" id="spDot0"></div>
+    <div class="sp-dot" id="spDot0"></div>
     <div class="sp-dot" id="spDot1"></div>
     <div class="sp-dot" id="spDot2"></div>
     <div class="sp-dot" id="spDot3"></div>
@@ -4556,7 +4619,7 @@ function switchPage(name,idx){
     page.querySelectorAll('.card, .avg-card, .stat-card, .marks-form').forEach((el,i)=>{
       el.style.animation = 'none';
       el.offsetWidth; // reflow
-      el.style.animation = 'cardIn .3s '+(i*0.06)+'s both';
+      el.style.animation = 'cardIn .2s '+(i*0.04)+'s both';
     });
   }, 20);
   try{if(navigator.vibrate)navigator.vibrate(6);}catch(e){}
@@ -5289,13 +5352,11 @@ function deleteExam(id){state.exams=state.exams.filter(e=>e.id!==id);save();rend
 function initUserProfile(){
   const name=localStorage.getItem('neetUserName');
   const year=localStorage.getItem('neetYear');
-  if(!name){
-    document.getElementById('onboardOverlay').classList.add('show');
-    const grid=document.getElementById('obYearGrid');
-    grid.innerHTML=[2025,2026,2027,2028].map(y=>`<button class="ob-year-btn" onclick="obSelectYear(${y},this)">${y}</button>`).join('');
-    return;
-  }
-  applyUserProfile(name,parseInt(year||'2026'));
+  // New gate system handles onboarding — just apply profile if available
+  if(name) applyUserProfile(name, parseInt(year||'2026'));
+  // Hide old onboard overlay if it somehow shows
+  const ob = document.getElementById('onboardOverlay');
+  if(ob) ob.style.display='none';
 }
 let _obYear=null;
 function obSelectYear(y,el){
@@ -6268,9 +6329,9 @@ document.getElementById('mockDate').value=dateKey(now);
     const curDot = document.getElementById('spDot'+currentSlide);
     if(curDot) curDot.classList.remove('active');
 
-    // Move strip
+    // Move strip — GPU-composited translate
     const strip = document.getElementById('spSlides');
-    if(strip) strip.style.transform = 'translateX(-' + (idx*100) + '%)';
+    if(strip) strip.style.transform = 'translate3d(-' + (idx*100) + '%,0,0)';
 
     // Activate new slide
     currentSlide = idx;
@@ -6332,62 +6393,100 @@ document.getElementById('mockDate').value=dateKey(now);
   window.skipSplash = function(){
     if(slideTimer) clearTimeout(slideTimer);
     const sp = document.getElementById('splash');
-    if(sp){ sp.classList.add('out'); setTimeout(()=>sp.style.display='none', 600); }
+    if(sp){ sp.classList.add('out'); setTimeout(()=>{ sp.classList.remove('visible'); sp.classList.remove('out'); }, 500); }
   };
 
-  // Kick off slide 1 progress bar
-  setTimeout(()=>{
-    const fill = document.getElementById('spProgressFill');
-    const dur  = SLIDE_DURATIONS[0];
-    if(fill){
-      fill.style.transition = 'width ' + dur + 'ms linear';
-      fill.style.width = '100%';
-    }
-    slideTimer = setTimeout(()=>goToSlide(1), dur);
-  }, 80);
+  // Kick off slide 1 progress bar — deferred until splash is shown
+  function startSplashSequence(){
+    const sp = document.getElementById('splash');
+    if(!sp || !sp.classList.contains('visible')) return;
+    // Activate first slide
+    const s0 = document.getElementById('spSlide0');
+    if(s0){ s0.offsetWidth; s0.classList.add('active'); }
+    const dot0 = document.getElementById('spDot0');
+    if(dot0) dot0.classList.add('active');
+    setTimeout(()=>{
+      const fill = document.getElementById('spProgressFill');
+      const dur  = SLIDE_DURATIONS[0];
+      if(fill){
+        fill.style.transition = 'width ' + dur + 'ms linear';
+        fill.style.width = '100%';
+      }
+      slideTimer = setTimeout(()=>goToSlide(1), dur);
+    }, 120);
+  }
+  window._startSplashSequence = startSplashSequence;
 
 })();
 
-renderTasks();
-renderGoals();
-renderBacklogs();
-renderStreak();
-renderSyllabusTracker();
-renderChapterPanel('phy');
-renderMockHistory();
-renderWeakTopics();
-renderHomeUpcomingTests();
-updateTopStats();
-renderHeatmap();
-initUserProfile();
+// Defer all renders to next frame so the gate screen paints first
+requestAnimationFrame(()=>{
+  renderTasks();
+  renderGoals();
+  renderBacklogs();
+  renderStreak();
+  updateTopStats();
+  renderHomeUpcomingTests();
+  initUserProfile();
+  // Heavier renders in subsequent frame
+  requestAnimationFrame(()=>{
+    renderSyllabusTracker();
+    renderChapterPanel('phy');
+    renderMockHistory();
+    renderWeakTopics();
+    renderHeatmap();
+  });
+});
 renderDailyTip('homeDailyTip');
-// Auto-sync calendars on load (after splash data is ready)
+// Auto-sync calendars — deferred until after gate+splash complete
 setTimeout(() => {
-  syncCalendar();
-  syncMockExams();
-}, 3400);
+  if(typeof syncCalendar==='function') syncCalendar();
+  if(typeof syncMockExams==='function') syncMockExams();
+}, 6000);
 document.getElementById('planDateLabel')?.textContent;
 
-// ── Google Login Screen: show unless previously signed in ────────
-setTimeout(()=>{
+// ── Gate screen boot ─────────────────────────────────────────────
+(function bootGate(){
   const prevSignedIn = localStorage.getItem('gd_signed_in') === '1';
-  const loginScreen = document.getElementById('googleLoginScreen');
-  if(loginScreen){
-    if(!prevSignedIn){
-      // Show login screen — app is already rendered behind it
-      loginScreen.classList.remove('hidden');
-    } else {
-      // Was signed in before — hide login screen, init auth silently
-      loginScreen.classList.add('hidden');
-      // initGoogleAuth() and silent token request happen in window.load above
-    }
+  const hasName      = !!localStorage.getItem('neetUserName');
+  const gate         = document.getElementById('gateScreen');
+
+  if(prevSignedIn && hasName){
+    // ── RETURNING USER: show welcome-back panel then auto-enter ──
+    showGatePanel('gateWelcomeBack');
+    const name  = localStorage.getItem('gd_user_name') || localStorage.getItem('neetUserName') || 'Doctor';
+    const email = localStorage.getItem('gd_user_email') || '';
+    const pic   = localStorage.getItem('gd_user_pic')   || '';
+    document.getElementById('gateWbName').textContent  = name;
+    document.getElementById('gateWbEmail').textContent = email;
+    const av = document.getElementById('gateWbAvatar');
+    if(pic){ av.innerHTML = `<img src="${pic}" alt="">`; }
+    else   { av.textContent = name[0].toUpperCase(); }
+    // Stats
+    const chaps  = (state.chapters.phy.length + state.chapters.chem.length + state.chapters.bio.length);
+    const mocks  = state.mocks.length;
+    const streak = calcStreak();
+    document.getElementById('wbChaps').textContent  = chaps;
+    document.getElementById('wbMocks').textContent  = mocks;
+    document.getElementById('wbStreak').textContent = streak + 'd';
+    // Try silent auth in background
+    setTimeout(()=>{
+      initGoogleAuth();
+      if(gdTokenClient) gdTokenClient.requestAccessToken({prompt:''});
+    }, 600);
+  } else if(prevSignedIn && !hasName){
+    // Signed in but no profile yet — show onboarding
+    showGatePanel('gateOnboard');
+    setTimeout(()=>{ initGoogleAuth(); if(gdTokenClient) gdTokenClient.requestAccessToken({prompt:''}); }, 600);
+  } else {
+    // ── NEW USER: show sign-in panel ──────────────────────────────
+    showGatePanel('gateLogin');
   }
-  // Also update topbar user info if signed in
-  const name = localStorage.getItem('gd_user_name');
-  const pic  = localStorage.getItem('gd_user_pic');
-  const greet = document.getElementById('tbGreet');
-  if(greet && name){ greet.style.display='block'; greet.textContent = name.split(' ')[0]; }
-}, 100);
+  // Update topbar greeting
+  const tbName = localStorage.getItem('neetUserName');
+  const greet  = document.getElementById('tbGreet');
+  if(greet && tbName){ greet.style.display='block'; greet.textContent = 'Dr. ' + tbName; }
+})();
 
 // ═══════════════════════════════════════════════
 //  ▶ GOOGLE DRIVE SYNC  (appDataFolder)
@@ -6454,21 +6553,44 @@ function initGoogleAuth(){
   });
 }
 
+// ── Gate panel switcher ──────────────────────────────────────────
+function showGatePanel(id){
+  ['gateLogin','gateWelcomeBack','gateOnboard'].forEach(p=>{
+    const el = document.getElementById(p);
+    if(el) el.classList.toggle('gate-panel--hidden', p !== id);
+  });
+}
+
+// ── Gate: dismiss and show splash ────────────────────────────────
+function gateEnterApp(){
+  const gate = document.getElementById('gateScreen');
+  gate.classList.add('hidden');
+  setTimeout(()=>{
+    gate.classList.add('gone');
+    const sp = document.getElementById('splash');
+    if(sp){
+      sp.classList.add('visible');
+      // Start splash slide sequence after it becomes visible
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          if(window._startSplashSequence) window._startSplashSequence();
+        });
+      });
+    }
+  }, 380);
+}
+
 // ── Handle sign-in button click ─────────────────────────────────
 function handleGoogleSignIn(){
-  document.getElementById('glsLoading').classList.add('show');
-  document.getElementById('glsFeatures').style.opacity = '0.4';
-  document.getElementById('glsSignInBtn').style.display = 'none';
-  document.getElementById('glsSkipArea') && (document.getElementById('glsSkipArea').style.display='none');
+  document.getElementById('gateLoading').classList.add('show');
   if(!gdTokenClient) initGoogleAuth();
   if(gdTokenClient){
     gdTokenClient.requestAccessToken({prompt: 'consent'});
   } else {
-    // GIS not loaded yet — retry once
     setTimeout(()=>{
       initGoogleAuth();
       if(gdTokenClient) gdTokenClient.requestAccessToken({prompt:'consent'});
-      else { handleAuthError('GIS_NOT_LOADED'); }
+      else handleAuthError('GIS_NOT_LOADED');
     }, 1200);
   }
 }
@@ -6476,56 +6598,54 @@ function handleGoogleSignIn(){
 // ── After successful sign-in ─────────────────────────────────────
 async function onSignedIn(){
   try {
-    // Get user profile from token info
-    const r = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo`, {
-      headers: { Authorization: `Bearer ${gdAccessToken}` }
+    document.getElementById('gateLoadingTxt').textContent = 'Loading your profile…';
+    const r = await fetch('https://www.googleapis.com/oauth2/v3/userinfo',{
+      headers:{ Authorization:`Bearer ${gdAccessToken}` }
     });
     const profile = await r.json();
-    localStorage.setItem('gd_user_name', profile.name||'');
+    localStorage.setItem('gd_user_name',  profile.name||'');
     localStorage.setItem('gd_user_email', profile.email||'');
-    localStorage.setItem('gd_user_pic', profile.picture||'');
-    localStorage.setItem('gd_signed_in', '1');
+    localStorage.setItem('gd_user_pic',   profile.picture||'');
+    localStorage.setItem('gd_signed_in',  '1');
 
-    showLoginUserPill(profile);
+    document.getElementById('gateLoading').classList.remove('show');
 
-    // Load from drive, then decide if restore needed
+    // Load cloud data first
+    document.getElementById('gateLoadingTxt').textContent = 'Syncing from cloud…';
     await loadFromDrive();
 
-    // Hide login screen, show app
-    setTimeout(()=>{
-      document.getElementById('googleLoginScreen').classList.add('hidden');
-      document.getElementById('cloudSyncBtn').style.display = '';
-    }, 800);
-
+    const hasName = !!localStorage.getItem('neetUserName');
+    if(!hasName){
+      // New user — show onboarding with name pre-filled from Google
+      showGatePanel('gateOnboard');
+      const firstName = (profile.name||'').split(' ')[0];
+      const inp = document.getElementById('gateObName');
+      if(inp && firstName){ inp.value = firstName; document.getElementById('gateObNext').disabled = false; }
+    } else {
+      // Returning user — show welcome-back panel
+      showGatePanel('gateWelcomeBack');
+      document.getElementById('gateWbName').textContent  = profile.name || localStorage.getItem('neetUserName') || '';
+      document.getElementById('gateWbEmail').textContent = profile.email || '';
+      const av = document.getElementById('gateWbAvatar');
+      if(profile.picture){ av.innerHTML = `<img src="${profile.picture}" alt="">`; }
+      else { av.textContent = (profile.name||'U')[0].toUpperCase(); }
+      const chaps  = state.chapters.phy.length+state.chapters.chem.length+state.chapters.bio.length;
+      document.getElementById('wbChaps').textContent  = chaps;
+      document.getElementById('wbMocks').textContent  = state.mocks.length;
+      document.getElementById('wbStreak').textContent = calcStreak()+'d';
+    }
+    document.getElementById('cloudSyncBtn').style.display = '';
+    setOnlineStatus(true);
   } catch(e){
     console.error('Sign-in flow error:', e);
     handleAuthError(e.message);
   }
 }
 
-// ── Show user info pill on login screen ─────────────────────────
-function showLoginUserPill(profile){
-  const pill = document.getElementById('glsUserPill');
-  const nameEl = document.getElementById('glsUserName');
-  const emailEl = document.getElementById('glsUserEmail');
-  const avatarEl = document.getElementById('glsAvatar');
-  nameEl.textContent = profile.name || 'Signed in';
-  emailEl.textContent = profile.email || '';
-  if(profile.picture){
-    avatarEl.innerHTML = `<img src="${profile.picture}" alt="avatar">`;
-  } else {
-    avatarEl.textContent = (profile.name||'U')[0].toUpperCase();
-  }
-  pill.classList.add('show');
-  document.getElementById('glsLoading').classList.remove('show');
-  document.getElementById('glsFeatures').style.opacity = '1';
-}
-
 // ── Handle auth errors ───────────────────────────────────────────
 function handleAuthError(err){
-  document.getElementById('glsLoading').classList.remove('show');
-  document.getElementById('glsFeatures').style.opacity = '1';
-  document.getElementById('glsSignInBtn').style.display = '';
+  const ld = document.getElementById('gateLoading');
+  if(ld) ld.classList.remove('show');
   showToast('⚠ Sign-in failed — continuing offline', 'var(--red)');
   proceedOffline();
 }
@@ -6534,8 +6654,39 @@ function handleAuthError(err){
 function proceedOffline(){
   gdIsOnline = false;
   setOnlineStatus(false);
-  document.getElementById('googleLoginScreen').classList.add('hidden');
-  document.getElementById('offlineBanner').classList.add('show');
+  const hasName = !!localStorage.getItem('neetUserName');
+  if(!hasName){
+    showGatePanel('gateOnboard');
+  } else {
+    gateEnterApp();
+  }
+}
+
+// ── Onboarding step functions ────────────────────────────────────
+let _obSelectedYear = null;
+function gateObNext(){
+  const name = document.getElementById('gateObName').value.trim();
+  if(!name) return;
+  localStorage.setItem('neetUserName', name);
+  document.getElementById('gateObStep0').classList.add('gate-ob-step--hidden');
+  document.getElementById('gateObStep1').classList.remove('gate-ob-step--hidden');
+  document.getElementById('gobDot0').classList.remove('gate-ob-dot--active');
+  document.getElementById('gobDot1').classList.add('gate-ob-dot--active');
+}
+function gateObYear(y, el){
+  _obSelectedYear = y;
+  document.querySelectorAll('.gate-ob-year').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('gateObDone').disabled = false;
+}
+function gateObDone(){
+  if(!_obSelectedYear) return;
+  localStorage.setItem('neetYear', _obSelectedYear);
+  const name = localStorage.getItem('neetUserName') || '';
+  applyUserProfile(name, _obSelectedYear);
+  updateCountdown();
+  gateEnterApp();
+  showToast('Welcome! Your journey to 720 starts now 🚀');
 }
 
 // ── Set sync status indicator ────────────────────────────────────
@@ -6707,16 +6858,14 @@ async function manualSync(){
 
 // ── Auto-init on load ────────────────────────────────────────────
 window.addEventListener('load', ()=>{
-  // Check if previously signed in
+  // GIS library now loaded — if we're on the welcome-back panel, init auth silently
   const prevSignedIn = localStorage.getItem('gd_signed_in') === '1';
   if(prevSignedIn){
-    // Try silent token request
     setTimeout(()=>{
       initGoogleAuth();
       if(gdTokenClient) gdTokenClient.requestAccessToken({prompt:''});
-    }, 800);
+    }, 400);
   }
-  // Show login screen (unless already hidden by silent auth — handled in onSignedIn)
 });
 
 // Online/offline event listeners
